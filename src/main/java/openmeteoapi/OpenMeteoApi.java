@@ -1,5 +1,7 @@
 package openmeteoapi;
 
+import com.google.gson.Gson;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -42,7 +44,7 @@ public class OpenMeteoApi {
         return stringBuilder.toString();
     }
 
-    public String getAllData() throws IOException {
+    public OpenMeteoApiResults getAllData() throws IOException {
 
         URL url = new URL(this.prepareUrl());
 
@@ -61,7 +63,10 @@ public class OpenMeteoApi {
 
         connection.disconnect();
 
-        return response.toString();
+        Gson gson = new Gson();
+        OpenMeteoApiResults openMeteoApiResults = gson.fromJson(response.toString(), OpenMeteoApiResults.class);
+
+        return openMeteoApiResults;
 
     }
 
