@@ -1,4 +1,4 @@
-package openmeteoapi;
+package api.openmeteoapi;
 
 public class OpenMeteoApiResults {
 

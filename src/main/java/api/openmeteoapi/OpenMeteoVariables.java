@@ -1,4 +1,4 @@
-package openmeteoapi;
+package api.openmeteoapi;
 
 public enum OpenMeteoVariables {
     TEMPERATURE("temperature_2m","Temperature (2 m)"),

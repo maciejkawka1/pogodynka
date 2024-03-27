@@ -1,5 +1,7 @@
 package openmeteoapi;
 
+import api.openmeteoapi.OpenMeteoApi;
+import api.openmeteoapi.OpenMeteoVariables;
 import junit.framework.TestCase;
 import org.junit.jupiter.api.Test;
 

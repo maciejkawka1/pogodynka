@@ -1,4 +1,4 @@
-package openmeteoapi;
+package api.openmeteoapi;
 
 import com.google.gson.Gson;
 
