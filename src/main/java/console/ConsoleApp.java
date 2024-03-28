@@ -64,62 +64,49 @@ public class ConsoleApp {
             OpenMeteoApiResults result = openMeteoApi.getAllData();
             if(result != null){
 
-                System.out.println("Dla miasta: "+searchingLocation.getLocalizedName());
-                System.out.println("W kraju: " + searchingLocation.getCountry().getLocalizedName());
-                System.out.println("Reionu: " + searchingLocation.getRegion().getLocalizedName());
-                System.out.println("Znaleziono następujące dane:");
 
-                System.out.println("Czas:");
-                System.out.println(Arrays.toString(result.getHourly().getTime()));
-                System.out.println(OpenMeteoVariables.TEMPERATURE.getUserInfo());
-                System.out.println(Arrays.toString(result.getHourly().getTemperature_2m()));
 
-                Chart chart1 = new Chart(
-                        OpenMeteoVariables.TEMPERATURE.getUserInfo());
+                String betaTitle = "city: " + searchingLocation.getLocalizedName()
+                        + ", country: " + searchingLocation.getCountry().getLocalizedName()
+                        + ", region: " +  searchingLocation.getRegion().getLocalizedName()+ " - ";
 
-                chart1.addDataset(
+                showChart(OpenMeteoVariables.TEMPERATURE.getUserInfo(),
+                        betaTitle +OpenMeteoVariables.TEMPERATURE.getUserInfo(),
                         result.getHourly().getTime(),
-                        result.getHourly().getTemperature_2m(),
-                        OpenMeteoVariables.TEMPERATURE.getUnit()
+                        OpenMeteoVariables.TEMPERATURE.getUnit(),
+                        result.getHourly().getTemperature_2m()
                         );
 
-                chart1.showChart();
-
-
-                Chart chart2 = new Chart(
-                        OpenMeteoVariables.RELATIVE_HUMIDITY.getUserInfo());
-
-                chart2.addDataset(
+                showChart(OpenMeteoVariables.RELATIVE_HUMIDITY.getUserInfo(),
+                        betaTitle +OpenMeteoVariables.RELATIVE_HUMIDITY.getUserInfo(),
                         result.getHourly().getTime(),
-                        result.getHourly().getRelative_humidity_2m(),
-                        OpenMeteoVariables.RELATIVE_HUMIDITY.getUnit()
+                        OpenMeteoVariables.RELATIVE_HUMIDITY.getUnit(),
+                        result.getHourly().getRelative_humidity_2m()
                 );
 
-                chart2.showChart();
-
-                Chart chart3 = new Chart(
-                        OpenMeteoVariables.SEA_LEVEL_PRESSURE.getUserInfo());
-                chart3.addDataset(
+                showChart(OpenMeteoVariables.SEA_LEVEL_PRESSURE.getUserInfo(),
+                        betaTitle +OpenMeteoVariables.SEA_LEVEL_PRESSURE.getUserInfo(),
                         result.getHourly().getTime(),
-                        result.getHourly().getPressure_msl(),
-                        OpenMeteoVariables.SEA_LEVEL_PRESSURE.getUnit());
-                chart3.showChart();
+                        OpenMeteoVariables.SEA_LEVEL_PRESSURE.getUnit(),
+                        result.getHourly().getPressure_msl()
+                );
 
-                Chart chart4 = new Chart(
-                        OpenMeteoVariables.WIND_SPEED.getUserInfo());
-                chart4.addDataset(
-                        result.getHourly().getTime(),
-                        result.getHourly().getWind_speed_10m(),
-                        OpenMeteoVariables.WIND_SPEED.getUnit());
-                chart4.showChart();
 
-                Chart chart5 = new Chart(
-                        OpenMeteoVariables.WIND_DIRECTION.getUserInfo());
-                chart5.addDataset(
+                showChart(OpenMeteoVariables.WIND_SPEED.getUserInfo(),
+                        betaTitle +OpenMeteoVariables.WIND_SPEED.getUserInfo(),
                         result.getHourly().getTime(),
-                        result.getHourly().getWind_direction_10m(),
-                        OpenMeteoVariables.WIND_DIRECTION.getUnit());
-                chart5.showChart();
+                        OpenMeteoVariables.WIND_SPEED.getUnit(),
+                        result.getHourly().getWind_speed_10m()
+                );
+
+                showChart(OpenMeteoVariables.WIND_DIRECTION.getUserInfo(),
+                        betaTitle +OpenMeteoVariables.WIND_DIRECTION.getUserInfo(),
+                        result.getHourly().getTime(),
+                        OpenMeteoVariables.WIND_DIRECTION.getUnit(),
+                        result.getHourly().getWind_direction_10m()
+                );
+
+
 
             }
 
@@ -131,11 +118,13 @@ public class ConsoleApp {
 
     }
 
-    public void showChart(String fileTitle, String label, String[] x, String unit, Double[] y){
+    public Chart showChart(String fileTitle, String chartTitle, String[] x, String unit, Double[] y){
 
         Chart chart = new Chart(fileTitle);
         chart.addDataset(x,y,unit);
+        chart.showChart(chartTitle);
 
+        return chart;
     }
 
 }

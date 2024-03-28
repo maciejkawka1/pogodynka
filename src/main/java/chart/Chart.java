@@ -17,8 +17,8 @@ public class Chart extends JFrame {
 
     DefaultCategoryDataset dataset;
 
-    public Chart(String title){
-        setTitle(title);
+    public Chart(String fileTitle){
+        setTitle(fileTitle);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(800, 600);
     }
@@ -35,11 +35,11 @@ public class Chart extends JFrame {
 
     }
 
-    public void showChart(){
+    public void showChart(String chartTitle){
 
         JFreeChart chart =
                 ChartFactory.createLineChart(
-                        null,
+                        chartTitle,
                         null,
                         null,
                         dataset,
