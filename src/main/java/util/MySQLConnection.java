@@ -1,8 +1,7 @@
-package dbconnection;
-
+package util;
 
 import dao.Location;
-import exceptions.CreationException;
+import dao.TrackedLocations;
 
 import java.sql.*;
 import java.util.*;
@@ -33,7 +32,6 @@ public class MySQLConnection {
         }
     }
 
-    // Metoda do zwracania obiektu Connection
     public Connection getConnection() {
         return connection;
     }
@@ -65,6 +63,7 @@ public class MySQLConnection {
             }
         }
     }
+
     //create table
     public void createTableLocations() {
         try {
@@ -84,47 +83,61 @@ public class MySQLConnection {
         }
     }
 
-    public void addToDatabaseMap(Map<UUID, Location> map) {
+    public void addToDatabase(List<Location> list) {
         try {
             Statement statement = connection.createStatement();
-
-            for (Map.Entry<UUID, Location> entry : map.entrySet()) {
-                Location location = entry.getValue();
-                String sql = "INSERT INTO Locations (id, longtitude, latitude, city, region, country) VALUES ('" +
-                        location.getId() + "', '" +
-                        location.getLongtitude() + "', " +
-                        location.getLatitude() + ", '" +
-                        location.getCity() + "', '" +
-                        location.getRegion() + "', '" +
-                        location.getCountry() + "')";
-
-                statement.executeUpdate(sql);
-                System.out.println("Record added to the database");
+            for (int i = 0; i < list.size(); i++)
+            {
+                String sql = "INSERT INTO Locations" +
+                        "(id,longtitude,latitude,city,region,country)" +
+                        " VALUES('" +
+                        list.get(i).getId() + "','"
+                        + list.get(i).getLongtitude() + "',"
+                        + list.get(i).getLatitude() + ",'"
+                        + list.get(i).getCity() + "','"
+                        + list.get(i).getRegion() + "','"
+                        + list.get(i).getCountry() + "')";
+                System.out.println(sql);
+                statement.execute(sql);
+                System.out.println("Dodano rekord do bazy danych");
             }
             statement.close();
+            //connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public void deleteRowByCityName(String city){
+
+        try {
+            Statement statement = connection.createStatement();
+            String sql = "DELETE FROM Locations WHERE city = '"+city+"';";
+            statement.execute(sql);
+            System.out.println("Usunięto miasto: " + city);
+            statement.close();
+            //connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
     public static void main(String... args) throws SQLException, CreationException {
 
         MySQLConnection mySQLConnection = new MySQLConnection();
         mySQLConnection.connect();
-        mySQLConnection.createTableLocations();
+        //mySQLConnection.createTableLocations();
         TrackedLocations trackedLocations = new TrackedLocations();
 
-        Location location = new Location(null,23,11,"ffsgfdgdgdfgfdgfdgfdg","testR344343egion","testKraj");
+        Location location = new Location(null,56,44,"miasto", "region","22222222");
 
-        trackedLocations.addLocation(null,location);
-        Map<UUID, Location> locationMap = trackedLocations.getLocations();
+        trackedLocations.addLocation(location);
+        List<Location> locationList = trackedLocations.getLocations();
 
-        mySQLConnection.addToDatabaseMap(locationMap);
+        mySQLConnection.addToDatabase(locationList);
 
-
-        mySQLConnection.executeUpdate();
 
     }
 }
